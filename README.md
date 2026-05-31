@@ -1,5 +1,5 @@
 # yaml_peek and yaml_peek2
-Two convenient online tools to view accessible internet JEDI super YAML files one observer by one observer (`yaml_peek`) or further one filter by one filter for each observer (`yaml_peek2`).   
+Two convenient online tools to view accessible internet JEDI super YAML files observer by observer (`yaml_peek`) or further filter by filter for each observer (`yaml_peek2`).   
 ## Usage:
 ```
 https://pyDAmonitor.github.io/yaml_peek/yaml_peek.html?file=<URL>
