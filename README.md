@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="icon.jpg" width=200>
+</p>
+
 # yaml_peek and yaml_peek2
 Two convenient online tools to view accessible internet JEDI super YAML files observer by observer (`yaml_peek`) or further filter by filter for each observer (`yaml_peek2`).   
 ## Usage:
