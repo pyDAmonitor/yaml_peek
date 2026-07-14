@@ -33,6 +33,7 @@
 <script>
   const params = new URLSearchParams(window.location.search);
   const file = params.get('file');
+  const obsParam = params.get('obs');
 
   if (!file) {
     document.getElementById('title').innerHTML =
@@ -129,10 +130,23 @@
         activeBtn = btn;
       };
       btnRow.appendChild(btn);
-
-      // Auto-show Header on load
-      if (idx === 0) btn.click();
     });
+
+    // Auto-select: if ?obs= matches an observer name, click it; otherwise click Header
+    let autoClicked = false;
+    if (obsParam) {
+      const buttons = btnRow.querySelectorAll('button');
+      for (let i = 0; i < sections.length; i++) {
+        if (i > 0 && sections[i].label === obsParam) {
+          buttons[i].click();
+          autoClicked = true;
+          break;
+        }
+      }
+    }
+    if (!autoClicked) {
+      btnRow.querySelector('button')?.click();
+    }
   }
 </script>
 </body>
