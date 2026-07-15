@@ -10,6 +10,19 @@ https://pyDAmonitor.github.io/yaml_peek/yaml_peek.html?file=<URL>
 https://pyDAmonitor.github.io/yaml_peek/yaml_peek2.html?file=<URL>
 ```
 Replace `<URL>` with an actual web address.
+
+### URL Parameters
+
+| Parameter | Supported in | Description |
+|-----------|-------------|-------------|
+| `file`    | both | **(required)** URL of the YAML file to load |
+| `obs`     | both | (optional) Auto-select an observer by name |
+| `filter`  | yaml_peek2 only | (optional) Auto-select a filter (0-indexed) within the selected observer |
+
+Example with deep-link to a specific observer and filter:
+```
+yaml_peek2.html?file=<URL>&obs=aircar_t133&filter=2
+```
 <br>
 
 ## Example1 ([link](https://pyDAmonitor.github.io/yaml_peek/yaml_peek2.html?file=https://rapidrefresh.noaa.gov/pyDAmonitor/rrfsv2x/mostrecent/jedivar.yaml))

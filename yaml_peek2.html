@@ -57,6 +57,7 @@
   const params = new URLSearchParams(window.location.search);
   const file = params.get('file');
   const obsParam = params.get('obs');
+  const filterParam = params.get('filter');
 
   if (!file) {
     document.getElementById('title').innerHTML =
@@ -212,8 +213,9 @@
       activeSubBtn = null;
     }
 
-    function renderSubButtons(subs) {
+    function renderSubButtons(subs, defaultSubIdx) {
       clearSubButtons();
+      const clickIdx = (defaultSubIdx != null && defaultSubIdx >= 0 && defaultSubIdx < subs.length) ? defaultSubIdx : 0;
       subs.forEach((sub, idx) => {
         const btn = document.createElement('button');
         btn.textContent = sub.label;
@@ -225,7 +227,7 @@
           activeSubBtn = btn;
         };
         subBtnRow.appendChild(btn);
-        if (idx === 0) btn.click();
+        if (idx === clickIdx) btn.click();
       });
     }
 
@@ -250,12 +252,30 @@
     });
 
     // Auto-select: if ?obs= matches an observer name, click it; otherwise click Header
+    // If ?filter=N is given and obs is valid, show that filter (0-indexed) or obs_header if out of bounds
     let autoClicked = false;
     if (obsParam) {
       const sideButtons = sidebar.querySelectorAll('button');
       for (let i = 0; i < sections.length; i++) {
         if (sections[i].type === 'observer' && sections[i].label === obsParam) {
-          sideButtons[i].click();
+          // Determine which sub-button to auto-select
+          let defaultSubIdx = 0; // obs_header by default
+          if (filterParam != null && /^\d+$/.test(filterParam)) {
+            const subs = parseObserverSubs(sections[i].startIdx, sections[i].endIdx);
+            const filterIdx = parseInt(filterParam, 10);
+            // filters start at subs[1]; filterIdx 0 = subs[1]
+            if (subs.length > 1) {
+              defaultSubIdx = Math.min(filterIdx, subs.length - 2) + 1;
+            }
+          }
+
+          // Override the sidebar click to pass defaultSubIdx
+          if (activeSideBtn) activeSideBtn.classList.remove('active');
+          sideButtons[i].classList.add('active');
+          activeSideBtn = sideButtons[i];
+          const subs = parseObserverSubs(sections[i].startIdx, sections[i].endIdx);
+          renderSubButtons(subs, defaultSubIdx);
+
           autoClicked = true;
           break;
         }
