@@ -161,6 +161,26 @@
         const rawStart = filterStarts[f].idx;
         const rawEnd = filterStarts[f + 1]?.idx ?? endIdx;
 
+        let identifierName = '';
+        for (let j = rawStart + 1; j < rawEnd; j++) {
+          const trimmed = lines[j].trim();
+          if (trimmed === 'identifier:') {
+            const identifierIndent = lines[j].length - lines[j].trimStart().length;
+            for (let k = j + 1; k < rawEnd; k++) {
+              const candidate = lines[k].trim();
+              if (!candidate || candidate.startsWith('#')) continue;
+              const candidateIndent = lines[k].length - lines[k].trimStart().length;
+              if (candidateIndent <= identifierIndent) break;
+              const nameMatch = candidate.match(/^name:\s*(.+)$/);
+              if (nameMatch) {
+                identifierName = nameMatch[1].trim();
+                break;
+              }
+            }
+            break;
+          }
+        }
+
         // Output start: go back from rawStart to include adjacent comment lines
         let outputStart = rawStart;
         for (let j = rawStart - 1; j >= (f > 0 ? filterStarts[f - 1].idx : startIdx); j--) {
@@ -183,7 +203,7 @@
 
         const num = String(f).padStart(2, '0');
         subs.push({
-          label: `filter_${num}_${filterStarts[f].name}`,
+          label: `filter_${num}_${identifierName || filterStarts[f].name}`,
           startIdx: outputStart,
           endIdx: outputEnd
         });
